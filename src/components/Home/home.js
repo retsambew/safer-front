@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, createRef } from "react";
 import { View, Text, Image, Button, ScrollView, TextInput, StyleSheet, Switch, Animated, Dimensions, Vibration, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, TouchableOpacity, SafeAreaView } from "react-native";
 
-const Home = ({navigation}) => {
+export const App = () => {
   const reports=[{
     uid:user,
     score: "97",
@@ -35,10 +35,6 @@ const Home = ({navigation}) => {
     uid:user, name: "App3", type:"Type3", status:reports[2].status,cat:"Category3",repId:reports[2]
   }]
   const user={email:"test@gmail.com",pass:"testPass",bId:"test123",devId:123,orgName:"Test Org",apps:apps}
-
-  const uploadPage = () => {
-    navigation.navigate("Upload")
-  }
 	return (
 		<View>
       <View style={stylesheet.headView}>
@@ -66,7 +62,7 @@ const Home = ({navigation}) => {
               </TouchableOpacity>
             </View>
         )})}
-        <TouchableOpacity style={stylesheet.addApp} onPress={uploadPage}>
+        <TouchableOpacity style={stylesheet.addApp}>
           <View>
             <Text style={stylesheet.plus}>+</Text>
           </View>
@@ -152,4 +148,5 @@ const stylesheet = StyleSheet.create({
   },
 });
 
-export default Home;
+export default App;
+

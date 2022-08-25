@@ -1,5 +1,6 @@
 import React, { useState,useEffect,useCallback} from "react";
 import { View, Text, Image, ScrollView, TextInput, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import {user} from '../../data'
 import {Picker} from '@react-native-picker/picker';
 import base64 from 'base64-js'
 import {FFileSystem} from 'expo'
@@ -7,7 +8,7 @@ import {FFileSystem} from 'expo'
 // import RNFetchBlob from 'rn-fetch-blob'
 
 export const App = () => {
-  const [obj, setObj]=useState({name:"",pass:"",bid:"",devId:"",orgName:""});
+  const [obj, setObj]=useState({uid:"",name:"",type:"",cat:"",tnc:"",manifest:""});
   const [fileResponse, setFileResponse] = useState([]);
 
   const handleDocumentSelection = useCallback(async () => {
@@ -39,7 +40,16 @@ export const App = () => {
   }, []);
 
   const submitForm = () => {
-    alert(obj)
+    alert(JSON.stringify(obj));
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(obj)
+    };
+    fetch('http://localhost:5000/apps/add', requestOptions)
+        .then(response => response.json())
+        .then(data => alert(data))
+        .catch(err => alert(err));
   }
   
 	return (
@@ -64,14 +74,14 @@ export const App = () => {
 
           <Picker style={stylesheet.picker} itemStyle={stylesheet.pickerText}>
             <Picker.Item label='Type of Product' value='' />
-            <Picker.Item label="Type 1" value="val1" />
-            <Picker.Item label="Type 2" value="val2" />
+            <Picker.Item label="Type 1" value="val1"  onValueChange={(e) => setObj({ ...obj, type: e})}/>
+            <Picker.Item label="Type 2" value="val2"  onValueChange={(e) => setObj({ ...obj, type: e})}/>
           </Picker>
 
           <Picker style={stylesheet.picker} itemStyle={stylesheet.pickerText}>
             <Picker.Item label='Category' value='' />
-            <Picker.Item label="Type 1" value="val1" />
-            <Picker.Item label="Type 2" value="val2" />
+            <Picker.Item label="Type 1" value="val1" onValueChange={(e) => setObj({ ...obj, cat: e})}/>
+            <Picker.Item label="Type 2" value="val2" onValueChange={(e) => setObj({ ...obj, cat: e})} />
           </Picker>
 
           <View style={stylesheet.uploadView}>
@@ -93,7 +103,7 @@ export const App = () => {
 
           <TouchableOpacity style = {stylesheet.btn} onPress={()=>submitForm()}>
           <Text style = {stylesheet.btnText}>
-            SignUp
+            Upload
           </Text>
           </TouchableOpacity>
 

@@ -26,7 +26,7 @@ export const SignUp = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(obj)
     };
-    fetch('http://192.168.43.174:5000/users/add', requestOptions)
+    fetch('http://localhost:5000/users/add', requestOptions)
         .then(response => response.json())
         .then(data => alert(data));
   };

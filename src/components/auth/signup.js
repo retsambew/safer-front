@@ -8,9 +8,9 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import {user,setUser} from '../../data'
+import { user, setUser } from "../../data";
 
-export const SignUp = () => {
+export const SignUp = ({ navigation }) => {
   const [obj, setObj] = useState({
     email: "",
     pass: "",
@@ -18,18 +18,24 @@ export const SignUp = () => {
     devId: "",
     orgName: "",
   });
-// https://safer-sih.herokuapp.com/
+
+  // https://safer-sih.herokuapp.com/
   const submitForm = () => {
-    alert(JSON.stringify(obj));
     const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(obj)
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(obj),
     };
-    fetch('http://localhost:5000/users/add', requestOptions)
-        .then(response => response.json())
-        .then(data => alert(data));
+    fetch("http://localhost:5000/users/add", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        setUser(data);
+        alert("Data Submitted Successfully!");
+        navigation.navigate("Home");
+      })
+      .catch((err) => alert(err));
   };
+
   return (
     <View style={stylesheet.mainView}>
       <View style={stylesheet.headPad} />
@@ -170,23 +176,23 @@ const stylesheet = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "700",
   },
-  ball1:{
-    backgroundColor:"rgba(248, 179, 52, 1)",
-    height:25,
-    width:25,
-    borderRadius:15,
+  ball1: {
+    backgroundColor: "rgba(248, 179, 52, 1)",
+    height: 25,
+    width: 25,
+    borderRadius: 15,
     position: "absolute",
-    right:-10,
-    top:5
+    right: -10,
+    top: 5,
   },
-  ball2:{
-    backgroundColor:"rgba(248, 179, 52, 1)",
-    height:30,
-    width:30,
-    borderRadius:15,
+  ball2: {
+    backgroundColor: "rgba(248, 179, 52, 1)",
+    height: 30,
+    width: 30,
+    borderRadius: 15,
     position: "absolute",
-    left:-12,
-    top:305
+    left: -12,
+    top: 305,
   },
   footView: {
     top: -50,

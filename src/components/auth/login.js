@@ -108,7 +108,7 @@ const stylesheet = StyleSheet.create({
   logoText: {
     width: 134,
     color: "rgba(255, 255, 255, 1)",
-    fontSize: 45,
+    fontSize: 42,
     textTransform: "uppercase",
   },
   formView: {

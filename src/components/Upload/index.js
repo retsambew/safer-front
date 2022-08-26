@@ -12,16 +12,18 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import base64 from "base64-js";
 import { FFileSystem } from "expo";
-// import DocumentPicker, { types } from 'react-native-document-picker';
-// import RNFetchBlob from 'rn-fetch-blob'
+import DocumentPicker, { types } from "react-native-document-picker";
+// import RNFetchBlob from "rn-fetch-blob";
+import { user, setUser } from "../../data";
 
 export const App = ({ navigation }) => {
   const [obj, setObj] = useState({
+    uid: user._id,
     name: "",
-    pass: "",
-    bid: "",
-    devId: "",
-    orgName: "",
+    type: "",
+    cat: "",
+    tnc: "",
+    manifest: "",
   });
   const [fileResponse, setFileResponse] = useState([]);
 
@@ -55,68 +57,27 @@ export const App = ({ navigation }) => {
   const submitForm = () => {
     alert(JSON.stringify(obj));
     const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(obj)
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(obj),
     };
-    fetch('http://localhost:5000/apps/add', requestOptions)
-        .then(response => response.json())
-        .then(data => alert(data))
-        .catch(err => alert(err));
-  }
-  
-	return (
-		<View style={stylesheet.mainView}>
-        <View style={stylesheet.headPad}/>
-        <View style={stylesheet.headView}>
-          <Text style={stylesheet.logoText}>Safer</Text>
-        </View>
-        <View style={stylesheet.formView}>
-          <View style={stylesheet.infoView}>
-            <Text style={stylesheet.heading}>Upload Your App</Text>
-            <Text style = {stylesheet.subheading}>
-              Please Enter the following details of your app:
-            </Text>
-          </View>
+    fetch("http://localhost:5000/apps/add", requestOptions)
+      .then((response) => response.json())
+      .then((data) => alert(data))
+      .catch((err) => alert(err));
+  };
 
-          <TextInput
-          style={stylesheet.inputBox}
-          onChangeText={(e) => setObj({ ...obj, name: e})} 
-          placeholder="App Name"
-          />
-
-          <Picker style={stylesheet.picker} itemStyle={stylesheet.pickerText}>
-            <Picker.Item label='Type of Product' value='' />
-            <Picker.Item label="Type 1" value="val1"  onValueChange={(e) => setObj({ ...obj, type: e})}/>
-            <Picker.Item label="Type 2" value="val2"  onValueChange={(e) => setObj({ ...obj, type: e})}/>
-          </Picker>
-
-          <Picker style={stylesheet.picker} itemStyle={stylesheet.pickerText}>
-            <Picker.Item label='Category' value='' />
-            <Picker.Item label="Type 1" value="val1" onValueChange={(e) => setObj({ ...obj, cat: e})}/>
-            <Picker.Item label="Type 2" value="val2" onValueChange={(e) => setObj({ ...obj, cat: e})} />
-          </Picker>
-
-          <View style={stylesheet.uploadView}>
-            <TouchableOpacity 
-            style={stylesheet.uploadSection} 
-            onPress={handleDocumentSelection}>
-              <Text style = {stylesheet.btnText}>
-                Upload T&C
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-            style={stylesheet.uploadSection} 
-            onPress={handleDocumentSelection}>
-              <Text style = {stylesheet.btnText}>
-                Upload Manifest
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity style = {stylesheet.btn} onPress={()=>submitForm()}>
-          <Text style = {stylesheet.btnText}>
-            Upload
+  return (
+    <View style={stylesheet.mainView}>
+      <View style={stylesheet.headPad} />
+      <View style={stylesheet.headView}>
+        <Text style={stylesheet.logoText}>Safer</Text>
+      </View>
+      <View style={stylesheet.formView}>
+        <View style={stylesheet.infoView}>
+          <Text style={stylesheet.heading}>Upload Your App</Text>
+          <Text style={stylesheet.subheading}>
+            Please Enter the following details of your app:
           </Text>
         </View>
 
@@ -126,19 +87,41 @@ export const App = ({ navigation }) => {
           placeholder="App Name"
         />
 
-        <Picker style={stylesheet.picker} itemStyle={stylesheet.pickerText}>
+        <Picker
+          selectedValue={obj.type}
+          style={stylesheet.picker}
+          itemStyle={stylesheet.pickerText}
+          onValueChange={(e) => setObj({ ...obj, type: e })}
+        >
           <Picker.Item label="Type of Product" value="" />
           <Picker.Item label="Type 1" value="val1" />
           <Picker.Item label="Type 2" value="val2" />
         </Picker>
 
-        <Picker style={stylesheet.picker} itemStyle={stylesheet.pickerText}>
+        <Picker
+          selectedValue={obj.cat}
+          style={stylesheet.picker}
+          itemStyle={stylesheet.pickerText}
+          onValueChange={(e) => setObj({ ...obj, cat: e })}
+        >
           <Picker.Item label="Category" value="" />
           <Picker.Item label="Type 1" value="val1" />
           <Picker.Item label="Type 2" value="val2" />
         </Picker>
 
-        <View style={stylesheet.uploadView}>
+        <TextInput
+          style={stylesheet.inputBox}
+          onChangeText={(e) => setObj({ ...obj, tnc: e })}
+          placeholder="Link of Privacy Policy"
+        />
+
+        <TextInput
+          style={stylesheet.inputBox}
+          onChangeText={(e) => setObj({ ...obj, manifest: e })}
+          placeholder="Link of Terms and Conditions"
+        />
+
+        {/* <View style={stylesheet.uploadView}>
           <TouchableOpacity
             style={stylesheet.uploadSection}
             onPress={handleDocumentSelection}
@@ -151,12 +134,14 @@ export const App = ({ navigation }) => {
           >
             <Text style={stylesheet.btnText}>Upload Manifest</Text>
           </TouchableOpacity>
-        </View>
 
+          <TouchableOpacity style={stylesheet.btn} onPress={() => submitForm()}>
+            <Text style={stylesheet.btnText}>Upload</Text>
+          </TouchableOpacity>
+        </View> */}
         <TouchableOpacity style={stylesheet.btn} onPress={() => submitForm()}>
-          <Text style={stylesheet.btnText}>SignUp</Text>
+          <Text style={stylesheet.btnText}>Upload</Text>
         </TouchableOpacity>
-
         <View style={stylesheet.ball1} />
         <View style={stylesheet.ball2} />
       </View>
@@ -188,7 +173,7 @@ const stylesheet = StyleSheet.create({
   logoText: {
     width: 134,
     color: "rgba(255, 255, 255, 1)",
-    fontSize: 45,
+    fontSize: 42,
     textTransform: "uppercase",
   },
   formView: {
